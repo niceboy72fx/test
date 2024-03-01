@@ -1,0 +1,8 @@
+FROM node:18.16.1-alpine
+
+RUN mkdir /code
+WORKDIR /code
+
+ADD ./package.json /code/
+
+RUN npm install
