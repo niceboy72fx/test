@@ -27,6 +27,9 @@ cd docker
 ./exec bserver
 ```
 
-Then visit: `https://yourlieapril.test/`
+Then visit: 
+HomePage: `https://yourlieapril.test/`
+ApiDoc: `https://yourlieapril.test/swagger/api/doc`
+
 
 # Edit by Luong Van Hoang / give me a coffee( 0388347846 / Liobank ) Thank's a lot :>>
