@@ -1,0 +1,57 @@
+#!/bin/bash
+
+
+NAME="web"
+
+FIRST_ARG="$1"
+shift
+ARGS="$@"
+
+docker_down () {
+    docker compose down --volumes
+}
+
+docker_up () {
+     docker compose up -d
+}
+
+help () {
+    echo "build             :  build docker instance"
+    echo "up                :  up docker instance"
+    echo "down              :  down docker inscance"
+    echo "restart           :  down then up docker instance"
+    echo "makemigrations    :  create migrations"
+    echo "migrate           :  mirgate database"
+    echo "bserver           :  run phoenix dev server"
+    echo "manage.py         :  run manage.py"
+}
+
+
+
+if [ "$FIRST_ARG" == "-h" ]; then
+    help
+    exit 0
+fi
+
+if [ "$FIRST_ARG" == "api" ] || [ "$FIRST_ARG" == "db" ] || [ "$FIRST_ARG" == "web" ]; then
+    docker compose exec "$NAME"_"$FIRST_ARG" $ARGS
+elif [ "$FIRST_ARG" == "bserver" ]; then
+    docker compose exec web poetry run python manage.py runserver 0.0.0.0:4000
+elif [ "$FIRST_ARG" == "up" ]; then
+    docker_up
+elif [ "$FIRST_ARG" == "down" ]; then
+    docker_down
+elif [ "$FIRST_ARG" == "makemigrations" ]; then
+    docker exec web poetry run python3 manage.py makemigrations
+elif [ "$FIRST_ARG" == "migrate" ]; then
+    docker exec web poetry run python3 manage.py migrate 
+elif [ "$FIRST_ARG" == "restart" ]; then
+    docker_down
+    docker_up
+elif [ "$FIRST_ARG" == "build" ]; then
+    docker compose build --no-cache
+else
+    echo "Invalid argument, please use following arguments:"
+    echo "-------------------------------------------------"
+    help
+fi
